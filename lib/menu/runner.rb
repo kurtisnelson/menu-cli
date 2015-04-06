@@ -36,7 +36,7 @@ module Menu
         bucket: @options.bucket,
         key: "#{@options.component}.json",
         content_type: "application/json",
-        cache_control: "max-age = 7200"
+        cache_control: "public, s-maxage=7200, max-age=120"
       )
       log "JSON uploaded"
     end
