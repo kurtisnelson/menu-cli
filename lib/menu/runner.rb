@@ -1,4 +1,3 @@
-require 'pry'
 module Menu
   class Runner
     def initialize options

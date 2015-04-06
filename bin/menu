@@ -15,12 +15,12 @@ options.bucket = ENV['MENU_BUCKET']
 optparse = OptionParser.new do|opts|
   opts.banner = "Usage: menu [options] <payload>"
 
-  opts.on( '-c', '--component [NAME]', [:waitress, :firmware, :bartender], 'Select component') do |app|
+  opts.on( '-c', '--component [NAME]', 'Select component') do |app|
     options.component = app
   end
 
   opts.on( '-b', '--beta', 'Mark beta') do |flag|
-    options.beta = true  
+    options.beta = true
   end
 
   opts.on('-v', '--verbose', 'Verbose') do |v|

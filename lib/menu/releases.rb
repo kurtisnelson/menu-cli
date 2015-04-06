@@ -5,7 +5,11 @@ module Menu
     def self.do component
       raise "Missing component" unless component
       response = @@con.get("/#{component}.json")
-      Releases.from_array response.body['releases']
+      if response.success?
+        Releases.from_array response.body['releases']
+      else
+        Releases.new
+      end
     end
 
     def self.from_array arr
