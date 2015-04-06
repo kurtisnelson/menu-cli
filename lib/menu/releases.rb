@@ -8,6 +8,7 @@ module Menu
       if response.success?
         Releases.from_array response.body['releases']
       else
+        puts "New component, creating empty list"
         Releases.new
       end
     end

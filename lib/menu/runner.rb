@@ -19,10 +19,11 @@ module Menu
       log "Beta release" if @options.beta
 
       r = Release.new
+      r.options = @options
       r.version = version
       r.payload_file = @options.payload
       r.beta = @options.beta
-      r.upload_payload @options
+      r.upload_payload
 
       releases << r
 
