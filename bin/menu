@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+require 'menu'
+require 'optparse'
+
+options = OpenStruct.new
+
+options.payload = nil
+options.component = nil
+options.beta = false
+options.verbose = false
+options.release = nil
+optparse = OptionParser.new do|opts|
+  opts.banner = "Usage: menu [options] <payload>"
+
+  opts.on( '-c', '--component [NAME]', [:waitress, :firmware, :bartender], 'Select component') do |app|
+    options.component = app
+  end
+
+  opts.on( '-b', '--beta', 'Mark beta') do |flag|
+    options.beta = true  
+  end
+
+  opts.on('-v', '--verbose', 'Verbose') do |v|
+    options.verbose = v
+  end
+
+  opts.on( '-r', '--release [NUM]', Integer, 'Set release #') do |v|
+    options.release = v
+  end
+
+  opts.on( '-h', '--help', 'Display this screen' ) do
+    puts opts
+    exit 
+  end
+end
+
+begin
+  optparse.parse!
+rescue OptionParser::InvalidOption => e
+  puts e
+  exit 1
+end
+
+if options.component == nil
+  puts "Missing component!"
+  exit 1
+end
+
+options.payload = ARGV.pop
+
+unless options.payload
+  puts "Missing payload!"
+  exit 1
+end
+
+Menu::Runner.new(options).release
