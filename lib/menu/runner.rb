@@ -34,7 +34,8 @@ module Menu
         body: releases.to_json,
         bucket: @options.bucket,
         key: "#{@options.component}.json",
-        content_type: "application/json"
+        content_type: "application/json",
+        cache_control: "max-age = 7200"
       )
       log "JSON uploaded"
     end
