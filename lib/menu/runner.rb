@@ -14,6 +14,7 @@ module Menu
         exit 1 unless gets.chomp == 'y'
       end
       version = @options.release if @options.release
+      releases.delete_if {|r| r.version == version }
 
       log "Release ##{version} for #{@options.component}..."
       log "Beta release" if @options.beta
