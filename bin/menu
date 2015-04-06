@@ -10,6 +10,8 @@ options.component = nil
 options.beta = false
 options.verbose = false
 options.release = nil
+options.bucket = ENV['MENU_BUCKET']
+
 optparse = OptionParser.new do|opts|
   opts.banner = "Usage: menu [options] <payload>"
 
@@ -42,7 +44,22 @@ rescue OptionParser::InvalidOption => e
   exit 1
 end
 
-if options.component == nil
+unless ENV['MENU_SSL_URL']
+  puts "Missing SSL-enabled URL, please set $MENU_SSL_URL in environment"
+  exit 1
+end
+
+unless ENV['MENU_URL']
+  puts "Missing base URL, please set $MENU_URL in environment"
+  exit 1
+end
+
+unless options.bucket
+  puts "Missing bucket, please set $MENU_BUCKET in environment"
+  exit 1
+end
+
+unless options.component
   puts "Missing component!"
   exit 1
 end

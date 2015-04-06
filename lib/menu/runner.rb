@@ -32,7 +32,7 @@ module Menu
       s3.put_object(
         acl: "public-read",
         body: releases.to_json,
-        bucket: "machine-software",
+        bucket: @options.bucket,
         key: "#{@options.component}.json",
         content_type: "application/json"
       )

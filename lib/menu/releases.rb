@@ -2,8 +2,6 @@ require 'faraday'
 require 'faraday_middleware'
 module Menu
   class Releases < Array
-    URI = 'http://machine-software.s3-website-us-east-1.amazonaws.com'
-
     def self.do component
       raise "Missing component" unless component
       response = @@con.get("/#{component}.json")
@@ -22,7 +20,7 @@ module Menu
       }.to_json
     end
 
-    @@con = Faraday.new(:url => URI) do |faraday|
+    @@con = Faraday.new(:url => ENV['MENU_URL']) do |faraday|
       faraday.request  :url_encoded             # form-encode POST params
       faraday.response :json, :content_type => /\bjson$/
       faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP

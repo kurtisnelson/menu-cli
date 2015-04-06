@@ -16,11 +16,11 @@ module Menu
       s3.put_object(
         acl: "public-read",
         body: File.open(payload_file),
-        bucket: 'machine-software',
+        bucket: options.bucket,
         key: key
       )
       puts "Upload complete." if options.verbose
-      self.payload = "https://updates.monsieur.co/" + key
+      self.payload = ENV['MENU_SSL_URL'] + key
     end
 
     def to_json s
