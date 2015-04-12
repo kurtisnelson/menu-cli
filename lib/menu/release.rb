@@ -10,7 +10,7 @@ module Menu
 
     def upload_payload
       s3 = Aws::S3::Client.new(region: 'us-east-1')
-      key = "#{options.component}/v#{self.version}-#{md5}#{File.extname(@payload_file)}"
+      key = "#{options.component}/v#{self.version}-#{@md5}#{File.extname(@payload_file)}"
       puts "Uploading payload (#{key}) to S3..." if @options.verbose
       s3.put_object(
         acl: "public-read",
@@ -30,6 +30,7 @@ module Menu
       @payload_file = file
       puts "Calcuating checksum..." if @options.verbose
       md5 = Digest::MD5.file(file).hexdigest
+      @md5 = md5
       puts "Checksum: "+ md5
     end
 
