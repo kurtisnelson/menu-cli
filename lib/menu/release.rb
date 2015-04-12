@@ -1,8 +1,16 @@
 require 'aws-sdk'
 require 'digest'
 module Menu
-  class Release < OpenStruct
+  class Release
     attr_accessor :options
+    attr_accessor :version, :md5, :payload, :beta
+
+    def initialize hash={}
+      @version = hash['version']
+      @md5 = hash['md5']
+      @payload = hash['payload']
+      @beta = hash['beta']
+    end
 
     def <=> o
       version <=> o.version
@@ -10,7 +18,7 @@ module Menu
 
     def upload_payload
       s3 = Aws::S3::Client.new(region: 'us-east-1')
-      key = "#{options.component}/v#{self.version}-#{@md5}#{File.extname(@payload_file)}"
+      key = "#{options.component}/v#{@version}-#{@md5}#{File.extname(@payload_file)}"
       puts "Uploading payload (#{key}) to S3..." if @options.verbose
       s3.put_object(
         acl: "public-read",
@@ -19,7 +27,7 @@ module Menu
         key: key
       )
       puts "Upload complete." if @options.verbose
-      self.payload = ENV['MENU_SSL_URL'] + '/' + key
+      @payload = ENV['MENU_SSL_URL'] + '/' + key
     end
 
     def payload_file= file
@@ -29,17 +37,16 @@ module Menu
       end
       @payload_file = file
       puts "Calcuating checksum..." if @options.verbose
-      md5 = Digest::MD5.file(file).hexdigest
-      @md5 = md5
-      puts "Checksum: "+ md5
+      @md5 = Digest::MD5.file(file).hexdigest
+      puts "Checksum: "+ @md5
     end
 
     def to_json s
       {
-        version: version,
-        beta: beta,
-        payload: payload,
-        md5: md5
+        version: @version,
+        beta: @beta,
+        payload: @payload,
+        md5: @md5
       }.to_json
     end
   end
